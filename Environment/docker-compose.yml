@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  postgres153:
+    image: postgres:15.3
+    container_name: postgres153
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "5dacb9130fb44377ad519eb2b479741f"
+    volumes:
+      - type: bind
+        source: C:\Database\cashflow\postgresql\data
+        target: /var/lib/postgresql/data
+    restart: always
