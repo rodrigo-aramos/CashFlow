@@ -76,6 +76,7 @@ namespace CashFlow.API
                 options.AddDefaultPolicy(builder =>
                 {
                     builder.WithOrigins(
+                            "http://localhost",
                             "http://localhost:5047"
                         )
                         .AllowAnyHeader()
@@ -145,7 +146,7 @@ namespace CashFlow.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DeskBooking.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CashFlow.API v1"));
             }
 
 #if !DEBUG
