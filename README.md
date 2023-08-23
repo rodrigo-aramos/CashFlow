@@ -23,16 +23,12 @@ cd .\Application\CashFlow<br>
 <br>
 - Executar o comando para construir e levantar os serviços:<br>
 <br>
-```bash
-docker-compose up -d
-```
+docker-compose up -d<br>
 <br>
 <br>
 - Para baixar os serviços, execute:<br>
 <br>
-```bash
-docker-compose down
-```
+docker-compose down<br>
 <br>
 <br>
 <br>
@@ -41,18 +37,14 @@ __Procedimento de teste__: <br>
 <br>
 - Necessário levantar o serviço do PostgreSQL:<br>
 <br>
-```bash
-cd .\Application\CashFlow 
-docker-compose up -d dbpostgres
-```
+cd .\Application\CashFlow <br>
+docker-compose up -d dbpostgres<br>
 <br>
 <br>
 - Executar rotinas de teste:<br>
 <br>
-```bash
-cd .\Application\CashFlow 
-dotnet test
-```
+cd .\Application\CashFlow <br>
+dotnet test<br>
 <br>
 <br>
 __Consumo da API__: <br>
