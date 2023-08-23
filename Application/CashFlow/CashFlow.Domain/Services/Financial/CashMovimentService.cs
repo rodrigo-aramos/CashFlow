@@ -72,10 +72,7 @@ namespace CashFlow.Domain.Services.Financial
                 BalanceNatureDescription = itemsGrouping.Sum(s => s.SumValueIn - s.SumValueOut) >= 0 ? "Entrada" : "Saída",
                 BalanceItems = itemsGrouping
             };
-
-            // Console.WriteLine($"Initial date: {startDate.ToString(CONST_DATE_TIME_FORMAT)}");
-            // Console.WriteLine($"Final date..: {endDate.ToString(CONST_DATE_TIME_FORMAT)}");
-
+            
             return new DefaultDtoResponse<DailyBalanceGetDtoResponse>(HttpStatusCode.OK, balance);
         }
 

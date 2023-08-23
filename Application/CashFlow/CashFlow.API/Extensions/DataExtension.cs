@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using CashFlow.Data.Infrastructure.Context;
+using CashFlow.Infrastructure.Data.Context;
 
 namespace CashFlow.API.Extensions
 {

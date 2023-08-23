@@ -12,6 +12,11 @@ namespace CashFlow.Tests.Initializer;
 public class FinancialDataDBInitializer
 {
     
+    public FinancialDataDBInitializer ()
+    {
+        
+    }
+    
     private const string CONST_DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
 
     public void Seed(FinancialDbContext context)

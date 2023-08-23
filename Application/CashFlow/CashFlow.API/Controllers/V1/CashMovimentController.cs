@@ -3,10 +3,15 @@ using CashFlow.Domain.DTO.Request.Create.Financial;
 using CashFlow.Domain.DTO.Request.Update.Financial;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
+
 
 namespace CashFlow.API.Controllers.V1
 {
-    // [Authorize]
+
+#if !DEBUG
+    [Authorize]
+#endif
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
@@ -20,29 +25,41 @@ namespace CashFlow.API.Controllers.V1
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Administrator")]
+#if !DEBUG
+        [Authorize(Roles = "Administrator")]
+#endif
         [Route("{id}")]
-        public IActionResult Get(long id)
+        public IActionResult Get(long? id)
         {
-            return ResponseCustom(_cashMovimentService.GetCashMovimentById(id));
+            if (!id.HasValue)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, default);
+            }
+            return ResponseCustom(_cashMovimentService.GetCashMovimentById(id ?? 0));
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Administrator")]
+#if !DEBUG
+        [Authorize(Roles = "Administrator")]
+#endif
         public IActionResult Post([FromBody] CashMovimentCreateDtoRequest model)
         {
             return ResponseCustom(_cashMovimentService.SaveCashMoviment(model));
         }
 
         [HttpPatch]
-        //[Authorize(Roles = "Administrator")]
+#if !DEBUG
+        [Authorize(Roles = "Administrator")]
+#endif
         public IActionResult Patch([FromBody] CashMovimentUpdateDtoRequest model)
         {
             return ResponseCustom(_cashMovimentService.UpdateCashMoviment(model));
         }
 
         [HttpDelete]
-        //[Authorize(Roles = "Administrator")]
+#if !DEBUG
+        [Authorize(Roles = "Administrator")]
+#endif
         [Route("{id}")]
         public IActionResult Delete(long id)
         {
@@ -51,11 +68,12 @@ namespace CashFlow.API.Controllers.V1
         
         [HttpGet]
         [Route("balance")]
-        //[Authorize(Roles = "Administrator")]
+#if !DEBUG
+        [Authorize(Roles = "Administrator")]
+#endif
         public IActionResult GetBalance([FromQuery] string start, [FromQuery] string end)
         {
             return ResponseCustom(_cashMovimentService.ListDailyBalance(start, end));
         }
-
     }
 }

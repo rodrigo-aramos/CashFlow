@@ -27,16 +27,13 @@ namespace CashFlow.API
 
         public IConfiguration Configuration { get; }
         
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Documentation
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CashFlow.API", Version = "v1" });
             });
 
-            // Context
             string connectionString = Configuration.GetConnectionString("PostgreSQL-Local");
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_HOST")))
                 connectionString = Configuration.GetConnectionString("PostgreSQL-Production")
@@ -61,7 +58,6 @@ namespace CashFlow.API
 
                     });
 
-            // Logging
 #if DEBUG
             services.AddLogging(loggingBuilder =>
             {
@@ -70,7 +66,6 @@ namespace CashFlow.API
                 loggingBuilder.AddDebug();
             });
 
-            // CORS
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -86,7 +81,6 @@ namespace CashFlow.API
                 });
             });
 #else
-            // CORS
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -100,10 +94,8 @@ namespace CashFlow.API
             });
 #endif
 
-            // Controllers
             services.AddControllers();
 
-            // Authentication
             string secret = Configuration.GetValue<string>("Secret");
             var key = Encoding.ASCII.GetBytes(secret);
 
@@ -139,15 +131,11 @@ namespace CashFlow.API
                 });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CashFlow.API v1"));
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CashFlow.API v1"));
 
 #if !DEBUG
             app.UseHttpsRedirection();
