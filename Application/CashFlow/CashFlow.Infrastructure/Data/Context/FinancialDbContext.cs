@@ -2,7 +2,7 @@ using CashFlow.Domain.Entity.Financial;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace CashFlow.Data.Infrastructure.Context;
+namespace CashFlow.Infrastructure.Data.Context;
 
 public class FinancialDbContext : DbContext
 {

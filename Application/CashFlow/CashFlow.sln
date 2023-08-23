@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Domain", "CashFlow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Infrastructure", "CashFlow.Infrastructure\CashFlow.Infrastructure.csproj", "{401C2F38-8B08-4EE9-9EF4-50BCDB77359A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Tests", "CashFlow.Tests\CashFlow.Tests.csproj", "{85F9F4F6-C459-44BD-B9F9-E9B9F2DD0D92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{401C2F38-8B08-4EE9-9EF4-50BCDB77359A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{401C2F38-8B08-4EE9-9EF4-50BCDB77359A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{401C2F38-8B08-4EE9-9EF4-50BCDB77359A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85F9F4F6-C459-44BD-B9F9-E9B9F2DD0D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85F9F4F6-C459-44BD-B9F9-E9B9F2DD0D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85F9F4F6-C459-44BD-B9F9-E9B9F2DD0D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85F9F4F6-C459-44BD-B9F9-E9B9F2DD0D92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

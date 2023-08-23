@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using CashFlow.Domain.Enum;
-using CashFlow.Domain.Entity;
 
 namespace CashFlow.Domain.Entity.Financial;
 

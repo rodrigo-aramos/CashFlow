@@ -11,7 +11,6 @@ using AutoMapper;
 using System.Collections.Generic;
 using System;
 using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
 using System.Linq;
 using CashFlow.Domain.Enum;
 

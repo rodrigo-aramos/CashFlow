@@ -1,11 +1,9 @@
 using CashFlow.Domain.Entity.Financial;
 using CashFlow.Domain.Interface.Repository.Financial;
-using CashFlow.Data.Infrastructure.Context;
-using LinqKit;
+using CashFlow.Infrastructure.Data.Context;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using CashFlow.Domain.Enum;
 
 
 namespace CashFlow.Infrastructure.Data.Repository.Financial
