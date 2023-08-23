@@ -11,7 +11,7 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/CashFlow.API/bin/Debug/net6.0/CashFlow.API.dll",
             "args": [],
-            "cwd": "F:/Projects/Repositorios/Backend/CashFlow/Application/CashFlow/CashFlow.API",
+            "cwd": "${workspaceFolder}/CashFlow/Application/CashFlow/CashFlow.API",
             "stopAtEntry": false,
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"

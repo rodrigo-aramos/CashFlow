@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  dbpostgres:
+    image: postgres:latest
+    hostname: dbpostgres
+    container_name: dbpostgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "5dacb9130fb44377ad519eb2b479741f"
+      POSTGRES_DB: dbcashflow
+    volumes:
+      - type: bind
+        source: C:\Database\cashflow\postgresql\data
+        target: /var/lib/postgresql/data
+    restart: always
+    networks:
+      - cashflownet
+
+  api:
+    build:
+      context: .
+      dockerfile: CashFlow.API/Dockerfile
+    ports:
+      - "80:5047"
+      - "443:7107"
+    environment:
+      DATABASE_NAME: dbcashflow
+      DATABASE_USER: postgres
+      DATABASE_PASS: 5dacb9130fb44377ad519eb2b479741f
+      DATABASE_PORT: 5432
+      DATABASE_HOST: dbpostgres
+    depends_on:
+      - dbpostgres 
+    networks:
+      - cashflownet
+
+networks:
+  cashflownet:
+    driver: bridge

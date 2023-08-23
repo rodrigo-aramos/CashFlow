@@ -37,8 +37,15 @@ namespace CashFlow.API
             });
 
             // Context
-            string connectionString = Configuration.GetConnectionString("PostgreSQL");
-            
+            string connectionString = Configuration.GetConnectionString("PostgreSQL-Local");
+            if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_HOST")))
+                connectionString = Configuration.GetConnectionString("PostgreSQL-Production")
+                    .Replace("{{DatabaseHost}}", Environment.GetEnvironmentVariable("DATABASE_HOST"))
+                    .Replace("{{DatabasePort}}", Environment.GetEnvironmentVariable("DATABASE_PORT"))
+                    .Replace("{{DatabaseName}}", Environment.GetEnvironmentVariable("DATABASE_NAME"))
+                    .Replace("{{DatabaseUser}}", Environment.GetEnvironmentVariable("DATABASE_USER"))
+                    .Replace("{{DatabasePass}}", Environment.GetEnvironmentVariable("DATABASE_PASS"));
+
             services
                 .AddDbContext<FinancialDbContext>(
                     options =>
