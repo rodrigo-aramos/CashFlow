@@ -1,9 +1,11 @@
 ﻿__Desenho de Solução__
 <br>
+<br>
 __Escopo da solução__:
 <br>
+<br>
 Desenhar arquitetura para suportar e disponibilizar os serviços de manutenção das informações do fluxo de caixa diário, com lançamentos 
-de entrada e saída) e a geração de relatório do saldo consolidado por dia.<br>
+de entrada e saída, e a geração de relatório do saldo consolidado por dia.<br>
 <br>
 Requisitos funcionais:<br>
 <br>
@@ -12,18 +14,17 @@ Requisitos funcionais:<br>
 <br>
 Requisitos não-funcionais:<br>
 <br>
-Não foram elencados outros requisitos não funcionais, senão a linguagem da aplicação e o ambiente de nuvem da organização.<br>
-Mas, por tratar-se de um exercício, aplicamos ao caso concreto a escolha de requisitos de natureza não-funcionais, quanto a compatibilidade; escalabilidade; resiliência; confiança e segurança. Deixamos de conhecer os requisitos quanto a performance; integração; ambiente e as eventuais restrições.<br>
+Não foram elencados outros requisitos não-funcionais, senão a linguagem da aplicação (NET C#) e o ambiente de nuvem da organização (AWS). Mas, por tratar-se de um exercício, aplicamos ao caso concreto a escolha de requisitos de natureza não-funcionais, quanto a compatibilidade; escalabilidade; resiliência; confiança e segurança. Deixamos de conhecer os requisitos quanto a performance; integração; ambiente e as eventuais restrições adicionadas pelos Stakeholders.<br>
 <br>
 Quanto aos recursos de arquitetura:<br>
 <br>
-Não há outras restrições ao uso da tecnologia senão ao uso do ambiente nuvem ("cloud") com recursos da Amazon WebServices - AWS<br>
+Não há outras restrições ao uso da tecnologia senão ao uso do ambiente nuvem ("cloud") com recursos da Amazon WebServices - AWS.<br>
 <br>
 Quanto ao desenho da solução:<br>
 <br>
-O desenho da solução baseou-se, como dito, nos pilares da segurança; da possibilidade de escalabilidade horizontal; da disponilidade distribuída (nuvem) e redundância.<br>
-Além disso, o trabalho não se orientou em relação ao custo benefício da sua aplicação e, primou-se pela utilização de serviços gerenciados (Software as a Service - SaaS).<br>
-Seria possível implementar a solução utilizando-se serviços de plataforma (Platform as a Service - PaaS) ou mesmo com apenas serviços de infraestrutura (Infrastructure as a Service - IaaS) mas optou-se pelo ambiente gerenciado ao invés do ambiente com gerenciamento próprio. Para distinguir, o ambiente gerenciado ou SaaS é de responsabilidade do provedor do serviço, principalmente quanto a sua disponibilidade, manutenção, atualização e monitoramento. Exemplo é o serviço de banco de dados (Amazon RDS); do Amazon Fargate para gerenciamento de containers ou mesmo do Elastic Container Service para escalonamento horizontal de aplicações.<br>
+O desenho da solução baseou-se, como dito, nos pilares da segurança; da possibilidade de escalabilidade horizontal; da disponilidade distribuida e redundância.<br>
+Além disso, o trabalho não se orientou no melhor custo benefício dos recursos escolhidos e, sim, primou-se pela utilização de serviços gerenciados (Software as a Service - SaaS) em detrimento dos não gerenciados (PaaS/IaaS).<br>
+Seria possível implementar a solução utilizando-se serviços de plataforma (Platform as a Service - PaaS) ou mesmo com apenas serviços de infraestrutura (Infrastructure as a Service - IaaS) mas optou-se pelo ambiente gerenciado ao invés do ambiente com gerenciamento próprio. Para distinguir, o ambiente gerenciado, ou SaaS, o gerenciamento é de responsabilidade do provedor do serviço, principalmente quanto a sua disponibilidade, manutenção, atualização e monitoramento. Exemplo é o serviço de banco de dados (Amazon RDS); do Amazon Fargate para gerenciamento de containers ou mesmo do Elastic Container Service para escalonamento horizontal de aplicações, as quais o usuário preocupa-se apenas em implementar a sua utilização, sem preocupar-se com .<br>
 O ambiente com gerenciamento, onde o mesmo é projeto com componentes de PaaS (banco de dados em máquinas virtuais) e IaaS, como máquinas virtuais (EC2), sub-redes, etc que dependem de pessoal capacitado para criar a infraestrutura e manter o seu gerenciamento, prevendo manutenção preventivas e intervenções de contingência, e a execução de "patchs" de atualização dos recursos que suportam a aplicação.<br>
 <br>
 O projeto arquitetural aplica-se também a um ambiente distribuído, com a utilização da padrão de microsserviços.<br>
