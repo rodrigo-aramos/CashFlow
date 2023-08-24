@@ -95,7 +95,7 @@ O respectivo acesso possibilitará o registro da nova imagem da aplicação no E
 Quanto a aplicação implementada:<br>
 <br>
 Observação: ao invés de utilizarmos os termos de débito e crédito como sugerido no desafio, utilizamos os termos entrada e saída, respectivamente.
-Isso porque, os termos débito e crédito reference às partidas dobradas de registro dos fatos contábeis. Na rotina de caixa, que são operações simples, registra-se apenas o fato como entrada ou saída.<br>
+Isso porque, os termos débito e crédito reference às partidas dobradas de registro dos fatos contábeis não refletem a realidade do regime de escrituração do Caixa. Na rotina de caixa, que são operações simples, registra-se apenas o fato como entrada ou saída. Ademais, em um plano de contas a conta Caixa teria natureza devedora (Débito) nas entradas e, credora (Crédito), nas saídas. Situação que trás alguma confusão para as pessoas.<br>
 <br>
 A aplicação foi implementada utilizando os princípios do DDD (Domain-Driven Design), utilizando-se como padrão estrutural Repositório (Repository), que consiste a segregação da aplicação em três camadas de aplicação, as quais vou enumerar de forma descrescente para entendimento.<br>
 <br>
@@ -118,6 +118,7 @@ Para finalizar, o que faltou?<br>
 Em virtude do foco: arquitetura de solução e, do tempo, deixamos de:<br>
 - criar as validações da regra de negócio no modelos da requisição, ou seja, validar a existência de um histórico válido para o lançamento; uma data de registro válida; um valor monetário positivo; a natureza da operação nos limites da enumeração criada (0-Entrada / 1-Saída);<br>
 - configurar a validação das credenciais e obtenção de token e claims recebidos em JWT (Json Web Tokens), bem como a definição das claims necessárias para acessar os recursos<br>
+- documentar melhor a API através da colocação de atributos nos métodos de chamada com informações adicionais para ser gerado no Swagger.<br>
 <br>
 <br>
 <br>
