@@ -50,40 +50,39 @@ Amazon Shield - Oferece uma proteção contra ataques de negação de serviço (
 Amazon WAF - WAF é acrônimo de "web application firewall", e como o nome sugere, é um firewal de entrada que permite a definição de políticas de egresso e ingresso de pacotes entre o ambiente externo e interno.<br>
 <br>
 Amazon Elastic IP - Oferece um IP estático fixo que garante que, se os serviços se reiniciarem, eles permaneçam endereçáveis e, portanto, acessíveis externamente. Quando os serviços são reiniciados, sejam manualmente ou automaticamente, por falhas, um novo IP é fornecido ao serviço e o mesmo endereça a máquina para o acesso externo. Quem resolve o domínio para o endereço IP é o servidor de DNS (Domain Name System). Logo, se o IP mudar, as máquinas não serão mais endereçadas por conta
-da mudança e o serviço terá a aparência de ter sido interrompido às vistas dos usuários. Assim, o recurso de IP elástico permite o escalonamento futuro e garante a acessibilidade dos serviços publicados para a internet.
+da mudança e o serviço terá a aparência de ter sido interrompido às vistas dos usuários, numa condição difícil de se tomar conhecimento, senão por reclamações dos usuários, apenas. Assim, o recurso de IP elástico permite o escalonamento futuro e garante a acessibilidade dos serviços publicados para a internet.
 <br>
 <br>
 Quanto aos fluxos:<br>
 <br>
 Estamos prevendo dois fluxos no desenho: um para os acessos aos serviços disponibilizados e, outro, de acesso e publicação das imagens de deploy das evoluções dos serviços, para serem atualizados no gerenciador de containers caso a equipe de desenvolvimento disponibilize nova versão da aplicação.<br>
 <br>
-No fluxo de consumo dos serviços, que inicia-se com o usuário através dos canais disponíveis nos equipamentos (devices) realiza a sua autenticação para obter um token de acesso.<br>
-Essa operação acontece mediante utilização do serviço do recurso do Amazon Cognito, que é um serviço de autenticação e autorização que permite o acesso federado, o login único (SSO - Single Sign On) e a autenticação e autorização por provedor externo (Facebook, Google, etc), onde delega-se a esses provedores a tarefa de validar as credenciais do usuário e informar os recursos que poderá acessar, sem que a organização precise gerenciar esses aspectos, ou mesmo, manter esses serviços e credenciais.<br>
+No fluxo de consumo dos serviços, que inicia-se com o usuário através dos canais disponíveis nos equipamentos, realizando a sua autenticação para obter um token de acesso e autorização de uso de recursos.<br>
+Essa operação acontece mediante utilização do serviço do recurso do Amazon Cognito, que é um serviço de autenticação e autorização que permite o acesso federado, o login único (SSO - Single Sign On) e a autenticação e autorização por provedor externo (Facebook, Google, etc), onde delega-se a esses provedores a tarefa de validar as credenciais do usuário e informar os recursos que poderá acessar, sem que a organização precise gerenciar esses aspectos, ou mesmo, de manter esses serviços e credenciais.<br>
 <br>
 Essa etapa de autenticação e autorização faz uso dos serviços do Amazon Identity Center para manter credenciais dos usuários ou para criar políticas de acesso, caso não seja adotado um Provedor de Identidades.<br>
-É previsto também o serviço do Amazon CloudTrail para realizar o rastreamento dos acessos requeridos e concedidos, bem como para identificar algum ataque malicioso.<br>
+É previsto também o serviço do Amazon CloudTrail para realizar o rastreamento das sessões dos acessos realizados, bem como para identificar algum ataque malicioso.<br>
 <br>
 Uma vez autenticado e de posse do token de acesso, o usuário poderá consumir os serviços da API, realizando a requisição adequada que passará pelo gateway de internet (IGW - Internet Gateway) que destinará a requisição para a aplicação de acordo com o caminho externo; passando pelo balanceador de carga (ALB - Application Load Balance), que elege a instância da aplicação que possui menos carga de trabalho.<br>
 <br>
-As aplicações (API de serviços) são executadas por intermédio do serviço do Amazon Fargate, que é um provedor de infraestrutura para a execução de containers. Esse containers, no caso, onde rodam as aplicações, encontram-se dentro de um conjunto (cluster) de containers, gerenciados por um serviço de escalonamento, chamado ECS (Elastic Container Service). O serviço do ECS é responsável por levantar quantas instâncias da aplicação forem configuradas, ou mesmo baixá-las em caso de atualizações ou problemas, bem como de descalonamento.<br>
-Assim, se a estratégia for de escalar horizontalmente as aplicações, que consiste em replicar a aplicação para conferir disponibilidade e resiliência, o ECS é configurado com o número de instâncias necessárias, os recursos necessários, bem como, dos critérios de escalonamento, quando for automático.<br>
+As aplicações (API de serviços) são executadas por intermédio do serviço do Amazon Fargate, que é um provedor de infraestrutura para a execução de containers. Esse containers, no caso, onde rodam as aplicações, encontram-se dentro de um conjunto (cluster) de containers, gerenciados por um serviço de escalonamento, chamado ECS (Elastic Container Service). O serviço do ECS é responsável por levantar quantas instâncias da aplicação forem configuradas, ou mesmo baixá-las em caso de atualizações ou problemas, bem como de descalonamento por redução de demanda.<br>
+Assim, se a estratégia for de escalar horizontalmente as aplicações, que consiste em replicar a aplicação para conferir disponibilidade e resiliência, o ECS é configurado com o número de instâncias necessárias, os recursos necessários, bem como, dos critérios de escalonamento, quando for de forma automática.<br>
 <br>
-Tanto o Amazon Fargate com ECS executam num contexto de uma sub-rede pública (acessível pela internet), com endereçamento limitado.<br>
-As instâncias em execução acessam em concorrência o serviço da Amazon RDS (Relational Database Service), que consiste num serviço (Saas) de banco de dados relacional, no caso, com a engine do PostgreSQL. O serviço do RDS é criado para operar no modo Multi-AZ, que consiste na configuração de um banco primária, que é replicado de forma síncrona numa segunda instância, garantindo redundância de dados e alta disponibilidade.<br>
-Como dito, o ambiente da aplicação é escalonável, mas depende da adoção das estratégias frente a necessidade. Assim, caso haja a opção pelo escalonamento da aplicação, entendo que o banco de dados não deve sofrer escalonamento horizontal das suas instâncias por conta da integridade dos seus dados, há de se adotar outra estratégia para o aumento da capacidade do banco de dados, como a sua segregação por domínio, a sua clusterização em partições, ou mesmo, a realização do processo de "sharding" das informações.<br>
+Tanto o Amazon Fargate e o ECS, executam num contexto de uma sub-rede pública (acessível pela internet), com endereçamento limitado.<br>
+As instâncias em execução acessam em concorrência o serviço do Amazon RDS (Relational Database Service), que consiste num serviço (SaaS) de banco de dados relacional, no caso, com o motor do PostgreSQL. O serviço do RDS é criado para operar no modo Multi-AZ, que consiste na configuração de um banco primária, que é replicado de forma síncrona numa segunda instância, garantindo redundância de dados e alta disponibilidade.<br>
+Como dito, o ambiente da aplicação é escalonável, mas depende da adoção das estratégias frente a necessidade. Assim, caso haja a opção pelo escalonamento da aplicação, entendemos que o banco de dados não deve sofrer escalonamento horizontal das suas instâncias por conta da integridade dos seus dados, há de se adotar outra estratégia para o aumento da capacidade do banco de dados, como a sua segregação por domínio, a sua clusterização em partições, ou mesmo, a realização do processo de "sharding" das informações.<br>
 De nada adianta escalar aplicações para suportar um volume maior de requisições, se as mesmas acessam o mesmo banco de dados, sobrecarregando as conexões e os recursos do gerenciador de banco de dados.<br>
 <br>
 O segundo fluxo, consiste no fluxo de construção e publicação. Os serviços do gerenciador de containers e instancias (Fargate/ECS) carregam e executam instâncias contidas na forma de imagens de container, padrão Docker (motor para criação e gerenciamentode containers).<br>
-Essas imagens, depois de criadas no ambiente do repositório de fontes do GitHub, através do recurso de actions), as mesmas são versionadas e salvas no registro de imagens.<br>
+Essas imagens, depois de criadas no ambiente do repositório de fontes do GitHub, através do recurso de actions, as mesmas são versionadas e salvas no registro de imagens.<br>
 Os containers criados com o Docker podem ser registrados na própria plataforma do Docker, que é proprietária e pública para não assinantes.<br>
-Para contornar essa possível falha de segurança, que é manter imagens das aplicações da organização em repositório de imagens de acesso público, sugerimos a adoção do serviço do Amzon ECR (Elastic Container Registry) para armazenar as imagens da aplicação.<br>
+Para contornar essa possível falha de segurança, que é manter imagens das aplicações da organização em repositório de imagens de acesso público, sugerimos a adoção do serviço do Amazon ECR (Elastic Container Registry) para armazenar as imagens da aplicação.<br>
 <br>
-Logo, o fluxo de publicação importa inicialmente, na realização de "commits" de alterações de código em uma versão estável, testada e funcional, a qual dá origem a uma imagem de execução, denominada imagem container.<br>
-Essa imagem é subida (upload) para o registro de imagens (ECR) e ficará disponível para ser carregada (download) e executada no ambiente de containers.<br>
+Logo, o fluxo de publicação importa inicialmente, na realização de "commits" de alterações de código em uma versão estável, testada e funcional, a qual dará origem a uma imagem de execução, denominada imagem container. Essa imagem é subida (push) para o registro de imagens (ECR) e ficará disponível para ser carregada (pull) e executada no ambiente dos containers.<br>
 <br>
-Para o acesso remoto, a entrada faz-se pelo serviço da Amazon PrivateLink (Endpoints) que consiste num endpoint de acesso a VPC através de uma conexão privada.<br>
+Para o acesso remoto, a entrada faz-se pelo serviço da Amazon PrivateLink (Endpoints) que consiste num endpoint de acesso a VPC (Virtual Private Cloud) através de uma conexão privada.<br>
 <br>
-Para realizar o acesso por conexão privada pelo GitHub, utilizando o recurso de "Actions", o mesmo (acesso), depende da existência de um usuário sistêmico com credenciais junto ao Amazon IAM (Identity and Access Management).<br>
+Para realizar o acesso por conexão privada pelo GitHub, repositório sugerido, utilizando o recurso de "Actions", este acesso depende da existência de um usuário sistêmico com credenciais junto ao Amazon IAM (Identity and Access Management) com privilégios limitados.<br>
 <br>
 O processo de publicação de novas versões não é automatizado e depende da intervenção humana, previamente definidos mediante estratégia de manutenção.<br>
 <br>
@@ -93,34 +92,34 @@ O respectivo acesso possibilitará o registro da nova imagem da aplicação no E
 Quanto a aplicação implementada:<br>
 <br>
 Observação: ao invés de utilizarmos os termos de débito e crédito como sugerido no desafio, utilizamos os termos entrada e saída, respectivamente.
-Isso porque, os termos débito e crédito referente às partidas dobradas no registro dos fatos contábeis não refletem a realidade do regime de escrituração do Caixa. Na rotina do caixa, que são operações simples, registra-se apenas o fato como entrada ou saída. Ademais, em um plano de contas a conta Caixa teria natureza devedora (Débito) nas entradas e, credora (Crédito), nas saídas. Situação que trás alguma confusão para as pessoas quando analisam isso no movimento.<br>
+Isso porque, os termos débito e crédito são referentes às partidas dobradas no registro dos fatos contábeis não refletem a realidade do regime de escrituração do Caixa. Na rotina do Caixa, que são operações simples, registram-se apenas o fato como entrada ou saída. Ademais, em um plano de contas a conta Caixa teria natureza devedora (Débito) nas entradas e, credora (Crédito), nas saídas. Situação que trazem alguma confusão para as pessoas quando analisam isso no relatório.<br>
 <br>
-A aplicação foi implementada utilizando os princípios do DDD (Domain-Driven Design), utilizando-se como padrão estrutural Repositório (Repository), que consiste a segregação da aplicação em três camadas de aplicação, as quais vou enumerar de forma descrescente para entendimento.<br>
+A aplicação foi implementada utilizando os princípios do DDD (Domain-Driven Design), utilizando-se como padrão estrutural de projeto o Repositório (Repository) com unidade de trabalho atômica (Unit Of Work). A aplicação sugerida possui três camadas, as quais vou enumerar de forma decrescente para entendimento.<br>
 <br>
-A terceira camada, a de infraestrutura, responsável por agregar as funcionalidades de acesso à base de dados, com utilização de um motor de ORM (Object Relational Mapping), com os mapeamentos das entidades do banco de dados utilizado, no caso, relacional PostgreSQL. A camada de infraestrutura foi concebida sob o padrão de unidade de trabalho (Unit Of Work) pela utilização de classe de contexto de dados (Context Collections) com classes de responsabilidade de executar ações padrões sobre cada entidade, considerando seu repositório específico de dados.<br>
+A terceira camada, a de infraestrutura, responsável por agregar as funcionalidades de acesso à base de dados, com utilização de um motor de ORM (Object Relational Mapping) implementada pelo EF (Entity Framework), com os mapeamentos das entidades do banco de dados utilizado, no caso, relacional PostgreSQL. A camada de infraestrutura foi concebida sob o padrão de unidade de trabalho (Unit Of Work) pela utilização de classe de contexto de dados (Context Collections) com classes de responsabilidade de executar ações padrões sobre cada entidade, considerando um repositório de operação específico para cada categoria de dado.<br>
 <br>
-A segunda camada, a de domínio, responsável por segregar as entidades de negócio, os serviços para a realização das regras de negócio do domínio; as classes de transporte (DTO - Data Transfer Object) e todos elementos cujo comportamento afetam ao domínio de negócio.<br>
+A segunda camada, a de domínio, responsável por segregar as entidades de negócio, os serviços para a realização das regras de negócio do domínio; as classes de transporte (DTO - Data Transfer Object) e todos elementos cujo comportamento afetam ou são impactados pelo domínio de negócio.<br>
 <br>
-A segunda camada, a de aplicação, que consiste na implementação do padrão de arquitetura MVC (Model View Controller), onde são expostos as controles que orchestram a execução das funcionalidades.<br>
-Essa camada expõe uma API (Application Programming Interface), no padrão Rest (Representational state transfer), com a definição de endpoints endereçáveis para a execução de tarefas sobre recursos.<br>
+A segunda camada, a de aplicação, que consiste na implementação parcial do padrão de arquitetura MVC (Model View Controller), onde são expostos as controles da execução das funcionalidades. Essa camada expõe uma API (Application Programming Interface), no padrão Rest (Representational state transfer), com a definição de endpoints endereçáveis para a execução de tarefas sobre recursos.<br>
 <br>
-A aplicação foi concebida para servir aplicações consumidoras, como aplicações móveis (mobile), desktop ou web. Ou seja, a camada de apresentação não faz parte do escopo do projeto.<br>
+A aplicação foi concebida para servir aplicações clientes, como aplicações móveis (mobile), desktop ou web. Ou seja, a camada de apresentação não faz parte do escopo do projeto e não foi desenvolvida no exercício.<br>
 <br>
-Além das referidas camadas de aplicação total implementada, foi criada uma aplicação de teste das funcionalidades da aplicação principal.<br>
+Além das referidas camadas de aplicação implementada, foi criada uma aplicação de teste das funcionalidades da aplicação principal.<br>
 <br>
-Para oportunizar o testes da aplicação em ambiente simulado, foi criado um ambiente de containers locais para executar um banco de dados relacional containerizado e a criação e execução de um container da aplicação. Esse ambiente de teste permite que a aplicação receba requisições locais em porta específica e realize a comunicação com o gerenciador de banco de dados independente, noutro container.<br>
+Para oportunizar o testes da aplicação em ambiente simulado, foi criado um ambiente de containers locais para executar um banco de dados relacional containerizado e a execução de um container da aplicação Rest. Esse ambiente de teste permite que a aplicação receba requisições locais em porta específica e realize a comunicação com o gerenciador de banco de dados de forma independente, noutro container.<br>
 <br>
 <br>
 Para finalizar, o que faltou?<br>
 <br>
 Em virtude do foco: arquitetura de solução e, do tempo, deixamos de:<br>
 - criar as validações da regra de negócio no modelos da requisição, ou seja, validar a existência de um histórico válido para o lançamento; uma data de registro válida; um valor monetário positivo; a natureza da operação nos limites da enumeração criada (0-Entrada / 1-Saída);<br>
-- configurar a validação das credenciais e obtenção de token e claims recebidos em JWT (Json Web Tokens), bem como a definição das claims necessárias para acessar os recursos<br>
+- configurar a validação das credenciais e obtenção de token e claims recebidos em JWT (Json Web Tokens), bem como a definição das claims necessárias para acessar os recursos do sistema;<br>
 - documentar melhor a API através da colocação de atributos nos métodos de chamada com informações adicionais para ser gerado no Swagger.<br>
 <br>
 <br>
 <br>
 __Instruções para execução e organização__<br>
+<br>
 <br>
 __Quanto ao modelo arquitetural:__<br>
 ==================================================================<br>
