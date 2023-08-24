@@ -33,8 +33,7 @@ Mas, para fins de exercício, optou-se pelo modelo de microsserviços por conta 
 <br>
 No quesito segurança, aplicamos os conceitos e a previsão de operacionalização com autenticação OIDC (OpenID Connect) que permite um ambiente federado de autenticação e autorização, com a utilização de recurso de login único (SSO - Single Sign On) ou mesmo de autenticação em provedores SAML como os existentes em redes sociais (Facebook, Google, etc).<br>
 Mesmo não sendo um ambiente conectado a provedores de autenticação externos (Facebook, Google, etc), isso não impede a sua operacionalização com a utilização dos recursos do Amazon Identity Center, que pode agregar usuários, grupos e recursos de acesso, em substituição ao referido provedor externo.<br>
-Nesse contexto, sabendo que o ambiente de execução foi moldado para uma realidade diferente da implementação da aplicação, visto que esse ambiente não existe de fato, os testes e verificações locais de segurança ficaram prejudicados por não haver um ambiente federado que pudesse suportar as rotinas de testes com o tráfego de tokens de sessão e claims.<br>
-E, desenvolver uma aplicação de autenticação e autorização que emulasse o comportamento estaria fora do escopo e tempo desse desafio.<br>
+Nesse contexto, sabendo que o ambiente de execução foi moldado para uma realidade diferente da implementação da aplicação, visto que esse ambiente não existe de fato, os testes e verificações locais de segurança ficaram prejudicados por não haver um ambiente federado que pudesse suportar as rotinas de testes com o tráfego de tokens de sessão e claims. Além disso, desenvolver uma aplicação de autenticação e autorização que emulasse o comportamento estaria fora do escopo e tempo desse desafio.<br>
 <br>
 Após as considerações acima, passamos a justificar o uso de cada recurso e ao final, descrever o fluxo de utilização dos mesmos.<br>
 <br>
@@ -46,9 +45,9 @@ Amazon Certificate Manager - O serviço oferece a guarda e consulta de certifica
 <br>
 Amazon Secrets Manager - A aplicação precisará obter credenciais para o acesso aos recursos, como banco de dados, etc. Logo, há a previsão da contratação de um serviço de guarda e acesso seguro dessas informações para que as mesmas não fiquem armazenadas na aplicação ou nas suas configurações, o que facilitaria a sua captura desautorizada e o seu uso fora da aplicação, para causar vazamentos ou prejuízos internos.<br>
 <br>
-Amazon Shield - Oferece uma proteção contra ataques de negação de serviços (Distributed Denial of Service - DDoS) na borda ou entrada do ambiente corporativo.<br>
+Amazon Shield - Oferece uma proteção contra ataques de negação de serviço (Distributed Denial of Service - DDoS) na borda ou entrada do ambiente corporativo.<br>
 <br>
-Amazon WAF - WAF é acrônimo de "web application firewall" e como o nome sugere, é um firewal de entrada que permite a definição de políticas de ingresso e egresso de pacotes entre o ambiente externo e interno.<br>
+Amazon WAF - WAF é acrônimo de "web application firewall", e como o nome sugere, é um firewal de entrada que permite a definição de políticas de egresso e ingresso de pacotes entre o ambiente externo e interno.<br>
 <br>
 Amazon Elastic IP - Oferece um IP estático fixo que garante que, se os serviços se reiniciarem, eles permaneçam endereçáveis e, portanto, acessíveis externamente. Quando os serviços são reiniciados, sejam manualmente ou automaticamente, por falhas, um novo IP é fornecido ao serviço e o mesmo endereça a máquina para o acesso externo. Quem resolve o domínio para o endereço IP é o servidor de DNS (Domain Name System). Logo, se o IP mudar, as máquinas não serão mais endereçadas por conta
 da mudança e o serviço terá a aparência de ter sido interrompido às vistas dos usuários. Assim, o recurso de IP elástico permite o escalonamento futuro e garante a acessibilidade dos serviços publicados para a internet.
