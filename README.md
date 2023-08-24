@@ -115,9 +115,9 @@ Para oportunizar o testes da aplicação em ambiente simulado, foi criado um amb
 <br>
 Para finalizar, o que faltou?<br>
 <br>
-Em virtude do foco: arquitetura de solução e, do tempo, deixamos de:
-- criar as validações da regra de negócio no modelos da requisição, ou seja,
-validar a existência de um histórico válido para o lançamento; uma data de registro válida; um valor monetário positivo; a natureza da operação nos limites da enumeração criada (0-Entrada / 1-Saída);
+Em virtude do foco: arquitetura de solução e, do tempo, deixamos de:<br>
+- criar as validações da regra de negócio no modelos da requisição, ou seja, validar a existência de um histórico válido para o lançamento; uma data de registro válida; um valor monetário positivo; a natureza da operação nos limites da enumeração criada (0-Entrada / 1-Saída);<br>
+- configurar a validação das credenciais e obtenção de token e claims recebidos em JWT (Json Web Tokens), bem como a definição das claims necessárias para acessar os recursos<br>
 <br>
 <br>
 <br>
