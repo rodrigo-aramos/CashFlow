@@ -1,7 +1,7 @@
-﻿#__Desenho de Solução__
-
-*__Escopo da solução__:
-
+﻿__Desenho de Solução__
+<br>
+__Escopo da solução__:
+<br>
 Desenhar arquitetura para suportar e disponibilizar os serviços de manutenção das informações do fluxo de caixa diário, com lançamentos 
 de entrada e saída) e a geração de relatório do saldo consolidado por dia.<br>
 <br>
@@ -112,7 +112,17 @@ Além das referidas camadas de aplicação total implementada, foi criada uma ap
 <br>
 Para oportunizar o testes da aplicação em ambiente simulado, foi criado um ambiente de containers locais para executar um banco de dados relacional containerizado e a criação e execução de um container da aplicação. Esse ambiente de teste permite que a aplicação receba requisições locais em porta específica e realize a comunicação com o gerenciador de banco de dados independente, noutro container.<br>
 <br>
-
+<br>
+Para finalizar, o que faltou?<br>
+<br>
+Em virtude do foco: arquitetura de solução e, do tempo, deixamos de:
+- criar as validações da regra de negócio no modelos da requisição, ou seja,
+validar a existência de um histórico válido para o lançamento; uma data de registro válida; um valor monetário positivo; a natureza da operação nos limites da enumeração criada (0-Entrada / 1-Saída);
+<br>
+<br>
+<br>
+__Instruções para execução e organização__<br>
+<br>
 __Quanto ao modelo arquitetural:__<br>
 ==================================================================<br>
 <br>
