@@ -78,13 +78,13 @@ Essas imagens, depois de criadas no ambiente do repositório de fontes do GitHub
 Os containers criados com o Docker podem ser registrados na própria plataforma do Docker, que é proprietária e pública para não assinantes.<br>
 Para contornar essa possível falha de segurança, que é manter imagens das aplicações da organização em repositório de imagens de acesso público, sugerimos a adoção do serviço do Amazon ECR (Elastic Container Registry) para armazenar as imagens da aplicação.<br>
 <br>
-Logo, o fluxo de publicação importa inicialmente, na realização de "commits" de alterações de código em uma versão estável, testada e funcional, a qual dará origem a uma imagem de execução, denominada imagem container. Essa imagem é subida (push) para o registro de imagens (ECR) e ficará disponível para ser carregada (pull) e executada no ambiente dos containers.<br>
+Logo, o fluxo de publicação importa inicialmente, na realização de "commits" de alterações de código em uma versão estável, testada e funcional, a qual dará origem a uma imagem de execução, denominada imagem container. Essa imagem é elevada (push) para o registro de imagens (ECR) e ficará disponível para ser carregada (pull) e executada no ambiente dos containers.<br>
 <br>
 Para o acesso remoto, a entrada faz-se pelo serviço da Amazon PrivateLink (Endpoints) que consiste num endpoint de acesso a VPC (Virtual Private Cloud) através de uma conexão privada.<br>
 <br>
 Para realizar o acesso por conexão privada pelo GitHub, repositório sugerido, utilizando o recurso de "Actions", este acesso depende da existência de um usuário sistêmico com credenciais junto ao Amazon IAM (Identity and Access Management) com privilégios limitados.<br>
 <br>
-O processo de publicação de novas versões não é automatizado e depende da intervenção humana, previamente definidos mediante estratégia de manutenção.<br>
+O processo de publicação de novas versões não é automatizado e depende da intervenção humana, previamente definida mediante uma estratégia de manutenção.<br>
 <br>
 O respectivo acesso possibilitará o registro da nova imagem da aplicação no ECR, para ser consumido pelo gerenciador de containers (Fargate/ECS).<br>
 <br>
@@ -92,21 +92,21 @@ O respectivo acesso possibilitará o registro da nova imagem da aplicação no E
 Quanto a aplicação implementada:<br>
 <br>
 Observação: ao invés de utilizarmos os termos de débito e crédito como sugerido no desafio, utilizamos os termos entrada e saída, respectivamente.
-Isso porque, os termos débito e crédito são referentes às partidas dobradas no registro dos fatos contábeis não refletem a realidade do regime de escrituração do Caixa. Na rotina do Caixa, que são operações simples, registram-se apenas o fato como entrada ou saída. Ademais, em um plano de contas a conta Caixa teria natureza devedora (Débito) nas entradas e, credora (Crédito), nas saídas. Situação que trazem alguma confusão para as pessoas quando analisam isso no relatório.<br>
+Isso porque, os termos débito e crédito são referentes às partidas dobradas no registro dos fatos contábeis não refletem a realidade do regime de escrituração do Caixa. Na rotina do Caixa, que são operações simples, registram-se apenas o fato como entrada ou saída. Ademais, em um plano de contas a conta Caixa teria natureza devedora (Débito) nas entradas e, credora (Crédito), nas saídas. Situação que traz alguma confusão para as pessoas quando analisam isso no relatório.<br>
 <br>
-A aplicação foi implementada utilizando os princípios do DDD (Domain-Driven Design), utilizando-se como padrão estrutural de projeto o Repositório (Repository) com unidade de trabalho atômica (Unit Of Work). A aplicação sugerida possui três camadas, as quais vou enumerar de forma decrescente para entendimento.<br>
+A aplicação foi implementada utilizando os princípios do DDD (Domain-Driven Design), utilizando-se como padrão estrutural de projeto o Repositório (Repository) com unidade de trabalho atômica (Unit Of Work). A aplicação sugerida possui três camadas, as quais vamos enumerar de forma decrescente para entendimento.<br>
 <br>
-A terceira camada, a de infraestrutura, responsável por agregar as funcionalidades de acesso à base de dados, com utilização de um motor de ORM (Object Relational Mapping) implementada pelo EF (Entity Framework), com os mapeamentos das entidades do banco de dados utilizado, no caso, relacional PostgreSQL. A camada de infraestrutura foi concebida sob o padrão de unidade de trabalho (Unit Of Work) pela utilização de classe de contexto de dados (Context Collections) com classes de responsabilidade de executar ações padrões sobre cada entidade, considerando um repositório de operação específico para cada categoria de dado.<br>
+A terceira camada, a de infraestrutura, responsável por agregar as funcionalidades de acesso à base de dados, com utilização de um motor de ORM (Object Relational Mapping) implementada pelo EF (Entity Framework), com os mapeamentos das entidades do banco de dados utilizado, no caso, relacional PostgreSQL. A camada de infraestrutura foi concebida sob o padrão de unidade de trabalho (Unit Of Work) pela utilização de classe de contexto de dados (Context in collections) com classes com a responsabilidade de executar ações padrões sobre cada entidade, considerando um repositório de operação específico para cada categoria de dado.<br>
 <br>
-A segunda camada, a de domínio, responsável por segregar as entidades de negócio, os serviços para a realização das regras de negócio do domínio; as classes de transporte (DTO - Data Transfer Object) e todos elementos cujo comportamento afetam ou são impactados pelo domínio de negócio.<br>
+A segunda camada, a de domínio, responsável por segregar as entidades de negócio, os serviços para a realização das regras de negócio do domínio; as classes de transporte (DTO - Data Transfer Object) e todos elementos cujo comportamento afetam ou são afetadas pelo domínio de negócio.<br>
 <br>
-A segunda camada, a de aplicação, que consiste na implementação parcial do padrão de arquitetura MVC (Model View Controller), onde são expostos as controles da execução das funcionalidades. Essa camada expõe uma API (Application Programming Interface), no padrão Rest (Representational state transfer), com a definição de endpoints endereçáveis para a execução de tarefas sobre recursos.<br>
+A segunda camada, a de aplicação, consiste na implementação parcial do padrão de arquitetura MVC (Model View Controller), onde são expostos os controles de execução das funcionalidades. Essa camada expõe uma API (Application Programming Interface), no padrão Rest (Representational state transfer), com a definição de endpoints endereçáveis para a execução de tarefas sobre recursos.<br>
 <br>
 A aplicação foi concebida para servir aplicações clientes, como aplicações móveis (mobile), desktop ou web. Ou seja, a camada de apresentação não faz parte do escopo do projeto e não foi desenvolvida no exercício.<br>
 <br>
 Além das referidas camadas de aplicação implementada, foi criada uma aplicação de teste das funcionalidades da aplicação principal.<br>
 <br>
-Para oportunizar o testes da aplicação em ambiente simulado, foi criado um ambiente de containers locais para executar um banco de dados relacional containerizado e a execução de um container da aplicação Rest. Esse ambiente de teste permite que a aplicação receba requisições locais em porta específica e realize a comunicação com o gerenciador de banco de dados de forma independente, noutro container.<br>
+Para oportunizar os testes da aplicação em ambiente simulado, foi criado um ambiente de containers locais para executar um banco de dados relacional containerizado, e a execução de um container da aplicação Rest. Esse ambiente de teste permite que a aplicação receba requisições locais em porta específica e realize a comunicação com o gerenciador de banco de dados de forma independente, em outro container.<br>
 <br>
 <br>
 Para finalizar, o que faltou?<br>
