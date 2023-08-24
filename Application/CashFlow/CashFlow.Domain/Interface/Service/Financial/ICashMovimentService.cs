@@ -1,17 +1,16 @@
-using CashFlow.Domain.DTO.Response.Financial;
-using CashFlow.Domain.DTO.Request.Create.Financial;
-using CashFlow.Domain.DTO.Request.Update.Financial;
-using CashFlow.Domain.DTO.Response;
+using CashFlow.Domain.DTO.ViewModels;
+using CashFlow.Domain.DTO.ViewModels.Financial;
+using CashFlow.Domain.DTO.Models.Financial;
 using System.Collections.Generic;
 
 namespace CashFlow.Domain.Interface.Service.Financial
 {
     public interface ICashMovimentService
     {
-        DefaultDtoResponse<DailyBalanceGetDtoResponse> ListDailyBalance(string startDay, string endDay);
-        DefaultDtoResponse<CashMovimentGetDtoResponse> GetCashMovimentById(long id);
-		DefaultDtoResponse<CashMovimentGetDtoResponse> SaveCashMoviment(CashMovimentCreateDtoRequest model);
-        DefaultDtoResponse<CashMovimentGetDtoResponse> UpdateCashMoviment(CashMovimentUpdateDtoRequest model);
-        DefaultDtoResponse<bool> DeleteCashMoviment(long id);
+        ResultViewModel<DailyBalanceViewModel> ListDailyBalance(string startDay, string endDay);
+        ResultViewModel<CashMovimentViewModel> GetCashMovimentById(long id);
+		ResultViewModel<CashMovimentViewModel> SaveCashMoviment(CashMovimentModel model);
+        ResultViewModel<CashMovimentViewModel> UpdateCashMoviment(CashMovimentModel model);
+        ResultViewModel<bool> DeleteCashMoviment(long id);
 	}
 }

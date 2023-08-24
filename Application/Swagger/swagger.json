@@ -84,17 +84,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CashMovimentCreateDtoRequest"
+                "$ref": "#/components/schemas/CashMovimentModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CashMovimentCreateDtoRequest"
+                "$ref": "#/components/schemas/CashMovimentModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CashMovimentCreateDtoRequest"
+                "$ref": "#/components/schemas/CashMovimentModel"
               }
             }
           }
@@ -123,17 +123,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CashMovimentUpdateDtoRequest"
+                "$ref": "#/components/schemas/CashMovimentModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CashMovimentUpdateDtoRequest"
+                "$ref": "#/components/schemas/CashMovimentModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CashMovimentUpdateDtoRequest"
+                "$ref": "#/components/schemas/CashMovimentModel"
               }
             }
           }
@@ -186,7 +186,7 @@
   },
   "components": {
     "schemas": {
-      "CashMovimentCreateDtoRequest": {
+      "CashMovimentModel": {
         "type": "object",
         "properties": {
           "id": {
@@ -212,7 +212,7 @@
         },
         "additionalProperties": false
       },
-      "CashMovimentUpdateDtoRequest": {
+      "CashMovimentModel": {
         "type": "object",
         "properties": {
           "id": {

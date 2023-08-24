@@ -1,7 +1,7 @@
 
 namespace CashFlow.Domain.Enum;
 
-public enum NatureCashMoviment
+public enum NatureCashMovimentEnum
 {
     InFlow = 0,
     OutFlow = 1

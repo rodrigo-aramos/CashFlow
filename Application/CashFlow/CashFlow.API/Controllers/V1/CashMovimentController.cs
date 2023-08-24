@@ -1,6 +1,5 @@
 using CashFlow.Domain.Interface.Service.Financial;
-using CashFlow.Domain.DTO.Request.Create.Financial;
-using CashFlow.Domain.DTO.Request.Update.Financial;
+using CashFlow.Domain.DTO.Models.Financial;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
@@ -42,7 +41,7 @@ namespace CashFlow.API.Controllers.V1
 #if !DEBUG
         [Authorize(Roles = "Administrator")]
 #endif
-        public IActionResult Post([FromBody] CashMovimentCreateDtoRequest model)
+        public IActionResult Post([FromBody] CashMovimentModel model)
         {
             return ResponseCustom(_cashMovimentService.SaveCashMoviment(model));
         }
@@ -51,7 +50,7 @@ namespace CashFlow.API.Controllers.V1
 #if !DEBUG
         [Authorize(Roles = "Administrator")]
 #endif
-        public IActionResult Patch([FromBody] CashMovimentUpdateDtoRequest model)
+        public IActionResult Patch([FromBody] CashMovimentModel model)
         {
             return ResponseCustom(_cashMovimentService.UpdateCashMoviment(model));
         }

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CashFlow.Domain.DTO.Request.Create.Financial
+namespace CashFlow.Domain.DTO.Models.Financial
 {
-    public class CashMovimentCreateDtoRequest
+    public class CashMovimentModel
     {
         public long Id { get; set; }
         public DateTime CreateAt { get; set; }

@@ -1,10 +1,9 @@
 using CashFlow.Domain.Entity.Financial;
 using CashFlow.Domain.Interface.Repository.Financial;
 using CashFlow.Domain.Interface.Service.Financial;
-using CashFlow.Domain.DTO.Response.Financial;
-using CashFlow.Domain.DTO.Response;
-using CashFlow.Domain.DTO.Request.Create.Financial;
-using CashFlow.Domain.DTO.Request.Update.Financial;
+using CashFlow.Domain.DTO.ViewModels;
+using CashFlow.Domain.DTO.ViewModels.Financial;
+using CashFlow.Domain.DTO.Models.Financial;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using AutoMapper;
@@ -37,7 +36,7 @@ namespace CashFlow.Domain.Services.Financial
             _logger = logger;
         }
         
-        public DefaultDtoResponse<DailyBalanceGetDtoResponse> ListDailyBalance(string startDay, string endDay)
+        public ResultViewModel<DailyBalanceViewModel> ListDailyBalance(string startDay, string endDay)
         {
             bool isValidStart = DateTime.TryParseExact(startDay, CONST_DATE_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate);
             bool isValidEnd = DateTime.TryParseExact(endDay, CONST_DATE_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate);
@@ -50,33 +49,33 @@ namespace CashFlow.Domain.Services.Financial
 
             var itemsGrouping = listItems
                 .GroupBy(x => x.CreateAt)
-                .Select(x => new DailyBalanceItemGetDtoResponse
+                .Select(x => new DailyBalanceItemViewModel
                 {
                     BalanceDate = x.Key.ToString(CONST_DATE_FORMAT),
-                    SumValueIn = x.Sum(s => s.Nature == (int)NatureCashMoviment.InFlow ? Math.Abs(s.Value) : 0),
-                    SumValueOut = x.Sum(s => s.Nature == (int)NatureCashMoviment.OutFlow ? Math.Abs(s.Value) : 0),
-                    BalanceValue = x.Sum(s => s.Nature == (int)NatureCashMoviment.InFlow ? s.Value : (s.Value * -1)),
+                    SumValueIn = x.Sum(s => s.Nature == (int)NatureCashMovimentEnum.InFlow ? Math.Abs(s.Value) : 0),
+                    SumValueOut = x.Sum(s => s.Nature == (int)NatureCashMovimentEnum.OutFlow ? Math.Abs(s.Value) : 0),
+                    BalanceValue = x.Sum(s => s.Nature == (int)NatureCashMovimentEnum.InFlow ? s.Value : (s.Value * -1)),
                     Nature = x.Min(s => s.Nature),
-                    NatureDescription = x.Min(s => s.Nature == (int)NatureCashMoviment.InFlow ? "Entrada" : "Saída")
+                    NatureDescription = x.Min(s => s.Nature == (int)NatureCashMovimentEnum.InFlow ? "Entrada" : "Saída")
                 })
                 .ToList();
             
-            var balance = new DailyBalanceGetDtoResponse
+            var balance = new DailyBalanceViewModel
             {
                 StartDate = startDate.ToString(CONST_DATE_FORMAT),
                 EndDate = endDate.ToString(CONST_DATE_FORMAT),
                 InFlowSum = itemsGrouping.Sum(s => s.SumValueIn),
                 OutFlowSum = itemsGrouping.Sum(s => s.SumValueOut),
                 Balance = itemsGrouping.Sum(s => s.SumValueIn - s.SumValueOut),
-                BalanceNature = itemsGrouping.Sum(s => s.SumValueIn - s.SumValueOut) >= 0 ? (int)NatureCashMoviment.InFlow : (int)NatureCashMoviment.OutFlow,
+                BalanceNature = itemsGrouping.Sum(s => s.SumValueIn - s.SumValueOut) >= 0 ? (int)NatureCashMovimentEnum.InFlow : (int)NatureCashMovimentEnum.OutFlow,
                 BalanceNatureDescription = itemsGrouping.Sum(s => s.SumValueIn - s.SumValueOut) >= 0 ? "Entrada" : "Saída",
                 BalanceItems = itemsGrouping
             };
             
-            return new DefaultDtoResponse<DailyBalanceGetDtoResponse>(HttpStatusCode.OK, balance);
+            return new ResultViewModel<DailyBalanceViewModel>(HttpStatusCode.OK, balance);
         }
 
-        public DefaultDtoResponse<CashMovimentGetDtoResponse> GetCashMovimentById(long id)
+        public ResultViewModel<CashMovimentViewModel> GetCashMovimentById(long id)
         {
             try
             {
@@ -85,23 +84,23 @@ namespace CashFlow.Domain.Services.Financial
                 if (cashMoviment == null)
                 {
                     _logger.LogError("CashMoviment was not found.");
-                    return new DefaultDtoResponse<CashMovimentGetDtoResponse>(HttpStatusCode.NotFound, null);
+                    return new ResultViewModel<CashMovimentViewModel>(HttpStatusCode.NotFound, null);
                 }
 
-                var result = _mapper.Map<CashMovimentGetDtoResponse>(cashMoviment);
+                var result = _mapper.Map<CashMovimentViewModel>(cashMoviment);
 
                 _logger.LogInformation("CashMoviment found.", result);
 
-                return new DefaultDtoResponse<CashMovimentGetDtoResponse>(HttpStatusCode.OK, result);
+                return new ResultViewModel<CashMovimentViewModel>(HttpStatusCode.OK, result);
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message, ex);
-                return new DefaultDtoResponse<CashMovimentGetDtoResponse>(HttpStatusCode.InternalServerError, null);
+                return new ResultViewModel<CashMovimentViewModel>(HttpStatusCode.InternalServerError, null);
             }
         }
 
-        public DefaultDtoResponse<CashMovimentGetDtoResponse> SaveCashMoviment(CashMovimentCreateDtoRequest model)
+        public ResultViewModel<CashMovimentViewModel> SaveCashMoviment(CashMovimentModel model)
         {
             try
             {
@@ -115,20 +114,20 @@ namespace CashFlow.Domain.Services.Financial
 
                 cashMoviment = _cashMovimentRepository.CreateCashMoviment(cashMoviment);
 
-                var result = _mapper.Map<CashMovimentGetDtoResponse>(cashMoviment);
+                var result = _mapper.Map<CashMovimentViewModel>(cashMoviment);
 
                 _logger.LogInformation("CashMoviment created.", result);
 
-                return new DefaultDtoResponse<CashMovimentGetDtoResponse>(HttpStatusCode.Created, result);
+                return new ResultViewModel<CashMovimentViewModel>(HttpStatusCode.Created, result);
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message, ex);
-                return new DefaultDtoResponse<CashMovimentGetDtoResponse>(HttpStatusCode.InternalServerError, null);
+                return new ResultViewModel<CashMovimentViewModel>(HttpStatusCode.InternalServerError, null);
             }
         }
 
-        public DefaultDtoResponse<CashMovimentGetDtoResponse> UpdateCashMoviment(CashMovimentUpdateDtoRequest model)
+        public ResultViewModel<CashMovimentViewModel> UpdateCashMoviment(CashMovimentModel model)
         {
             try
             {
@@ -137,7 +136,7 @@ namespace CashFlow.Domain.Services.Financial
                 if (current == null)
                 {
                     _logger.LogError("CashMoviment was not found.");
-                    return new DefaultDtoResponse<CashMovimentGetDtoResponse>(HttpStatusCode.BadRequest, null);
+                    return new ResultViewModel<CashMovimentViewModel>(HttpStatusCode.BadRequest, null);
                 }
 
                 var cashMoviment = new CashMoviment()
@@ -151,20 +150,20 @@ namespace CashFlow.Domain.Services.Financial
                 };
 
                 cashMoviment = _cashMovimentRepository.UpdateCashMoviment(cashMoviment);
-                var result = _mapper.Map<CashMovimentGetDtoResponse>(cashMoviment);
+                var result = _mapper.Map<CashMovimentViewModel>(cashMoviment);
 
                 _logger.LogInformation("CashMoviment updated successfully.", result);
 
-                return new DefaultDtoResponse<CashMovimentGetDtoResponse>(HttpStatusCode.OK, result);
+                return new ResultViewModel<CashMovimentViewModel>(HttpStatusCode.OK, result);
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message, ex);
-                return new DefaultDtoResponse<CashMovimentGetDtoResponse>(HttpStatusCode.InternalServerError, null);
+                return new ResultViewModel<CashMovimentViewModel>(HttpStatusCode.InternalServerError, null);
             }
         }
 
-        public DefaultDtoResponse<bool> DeleteCashMoviment(long id)
+        public ResultViewModel<bool> DeleteCashMoviment(long id)
         {
             try
             {
@@ -173,19 +172,19 @@ namespace CashFlow.Domain.Services.Financial
                 if (cashMoviment == null)
                 {
                     _logger.LogError("CashMoviment was not found.");
-                    return new DefaultDtoResponse<bool>(HttpStatusCode.BadRequest, false);
+                    return new ResultViewModel<bool>(HttpStatusCode.BadRequest, false);
                 }
 
                 _cashMovimentRepository.DeleteCashMoviment(cashMoviment);
 
                 _logger.LogInformation("CashMoviment was deleted successfully.");
 
-                return new DefaultDtoResponse<bool>(HttpStatusCode.OK, true);
+                return new ResultViewModel<bool>(HttpStatusCode.OK, true);
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message, ex);
-                return new DefaultDtoResponse<bool>(HttpStatusCode.InternalServerError, false);
+                return new ResultViewModel<bool>(HttpStatusCode.InternalServerError, false);
             }
         }
     }

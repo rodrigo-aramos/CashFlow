@@ -2,9 +2,9 @@ using CashFlow.Domain.Enum;
 using System;
 using System.Collections.Generic;
 
-namespace CashFlow.Domain.DTO.Response.Financial
+namespace CashFlow.Domain.DTO.ViewModels.Financial
 {
-    public class DailyBalanceGetDtoResponse
+    public class DailyBalanceViewModel
     {
         public string StartDate { get; set; }
         public string EndDate { get; set; }
@@ -12,7 +12,7 @@ namespace CashFlow.Domain.DTO.Response.Financial
         public decimal OutFlowSum { get; set; } = 0L;
         public decimal Balance { get; set; } = 0L;
         public string BalanceNatureDescription { get; set; } = "";
-        public int BalanceNature { get; set; } = (int)NatureCashMoviment.InFlow;
-        public IList<DailyBalanceItemGetDtoResponse> BalanceItems { get; set; }
+        public int BalanceNature { get; set; } = (int)NatureCashMovimentEnum.InFlow;
+        public IList<DailyBalanceItemViewModel> BalanceItems { get; set; }
     }
 }

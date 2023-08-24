@@ -29,31 +29,31 @@ public class FinancialDataDBInitializer
                 CreateAt = GetDate("2023-08-21 09:32:12"),
                 Historic = "Recebimento fornecedor cod.: 8993",
                 Value = 564.98M,
-                Nature = (int)NatureCashMoviment.InFlow
+                Nature = (int)NatureCashMovimentEnum.InFlow
             },
             new CashMoviment {
 				CreateAt = GetDate("2023-08-21 11:15:23"),
 				Historic = "Pagamento despesa correio",
 				Value = 21.73M,
-				Nature = (int)NatureCashMoviment.OutFlow
+				Nature = (int)NatureCashMovimentEnum.OutFlow
             },
             new CashMoviment {
 				CreateAt = GetDate("2023-08-21 15:09:11"),
 				Historic = "Pagamento despesa com frete",
 				Value = 50.00M,
-				Nature = (int)NatureCashMoviment.OutFlow
+				Nature = (int)NatureCashMovimentEnum.OutFlow
             },
             new CashMoviment {
 				CreateAt = GetDate("2023-08-22 08:22:43"),
 				Historic = "Recebimento fornecedor cod.: 12312",
 				Value = 1200.00M,
-                Nature = (int)NatureCashMoviment.InFlow
+                Nature = (int)NatureCashMovimentEnum.InFlow
             },
             new CashMoviment {
 				CreateAt = GetDate("2023-08-22 10:45:02"),
 				Historic = "Pagamento despesa com lavagem",
 				Value = 90.00M,
-				Nature = (int)NatureCashMoviment.OutFlow
+				Nature = (int)NatureCashMovimentEnum.OutFlow
             }
         );
         

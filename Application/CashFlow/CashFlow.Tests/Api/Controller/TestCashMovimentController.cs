@@ -131,7 +131,7 @@ public class TestCashMovimentController
         var result = (actionResult as ObjectResult);
         Assert.Equal(result.StatusCode, 200);
 
-        var dtoResponse = result.Value.Should().BeAssignableTo<DefaultDtoResponse<CashMovimentGetDtoResponse>>().Subject;
+        var dtoResponse = result.Value.Should().BeAssignableTo<ResultViewModel<CashMovimentViewModel>>().Subject;
 
         Assert.Equal("Recebimento fornecedor cod.: 8993", dtoResponse.Result.Historic);
     }
@@ -170,7 +170,7 @@ public class TestCashMovimentController
         var result = (actionResult as ObjectResult);
         Assert.Equal(result.StatusCode, 200);
 
-        var dtoResponse = result.Value.Should().BeAssignableTo<DefaultDtoResponse<DailyBalanceGetDtoResponse>>().Subject;
+        var dtoResponse = result.Value.Should().BeAssignableTo<ResultViewModel<DailyBalanceViewModel>>().Subject;
 
         Assert.Equal("21/08/2023", dtoResponse.Result.StartDate);
     }
@@ -191,7 +191,7 @@ public class TestCashMovimentController
         var result = (actionResult as ObjectResult);
         Assert.Equal(result.StatusCode, 200);
 
-        var dtoResponse = result.Value.Should().BeAssignableTo<DefaultDtoResponse<DailyBalanceGetDtoResponse>>().Subject;
+        var dtoResponse = result.Value.Should().BeAssignableTo<ResultViewModel<DailyBalanceViewModel>>().Subject;
 
         Assert.Equal(DateTime.Now.ToString(CONST_DATE_FORMAT), dtoResponse.Result.StartDate);
     }

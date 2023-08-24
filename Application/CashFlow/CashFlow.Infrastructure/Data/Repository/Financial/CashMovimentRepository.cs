@@ -53,7 +53,7 @@ namespace CashFlow.Infrastructure.Data.Repository.Financial
                     CreateAt = new DateTime(x.Key.CreateAt.Year, x.Key.CreateAt.Month, x.Key.CreateAt.Day),
                     Nature = x.Key.Nature,
                     Value = x.Sum(p => p.Value)
-                    // Value = x.Sum(p => p.Nature == (int)NatureCashMoviment.InFlow ? p.Value : (p.Value * -1))
+                    // Value = x.Sum(p => p.Nature == (int)NatureCashMovimentEnum.InFlow ? p.Value : (p.Value * -1))
                 })
                 .ToList();
         }
