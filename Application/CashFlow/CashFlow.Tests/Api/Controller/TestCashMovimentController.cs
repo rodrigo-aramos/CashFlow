@@ -16,8 +16,10 @@ using CashFlow.Domain.Services.Financial;
 using CashFlow.Domain.Profiles;
 using CashFlow.Domain.Interface.Service.Financial;
 using CashFlow.API.Controllers.V1;
-using CashFlow.Domain.DTO.Response;
-using CashFlow.Domain.DTO.Response.Financial;
+using CashFlow.Domain.DTO.ViewModels;
+using CashFlow.Domain.DTO.ViewModels.Financial;
+using System.Net;
+using Microsoft.Extensions.Configuration;
 
 namespace CashFlow.Tests.Api.Controller;
 
@@ -27,10 +29,17 @@ public class TestCashMovimentController
     private ICashMovimentService service;
 
     public static DbContextOptions<FinancialDbContext> dbContextOptions { get; }
-    public static string connectionString = "Host=localhost;Port=5432;Pooling=true;Database=dbcashflow;User Id=postgres;Password=5dacb9130fb44377ad519eb2b479741f;sslmode=Prefer;Trust Server Certificate=true";
+    public static string KEY_CONNECTION_STRING = "ConnectionStrings:PostgreSQL-Local";
+    // public static string ConnectionString = "Host=localhost;Port=5432;Pooling=true;Database=dbcashflow;User Id=postgres;Password=5dacb9130fb44377ad519eb2b479741f;sslmode=Prefer;Trust Server Certificate=true";
     
     static TestCashMovimentController()
     {
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+            
+        string connectionString = configuration.GetValue<string>(KEY_CONNECTION_STRING) ?? "";
+
         dbContextOptions = new DbContextOptionsBuilder<FinancialDbContext>()
             .UseNpgsql(connectionString)
             .Options;
@@ -55,6 +64,12 @@ public class TestCashMovimentController
         });
         var mapper = config.CreateMapper();
 
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.Development.json")
+            .Build();
+
+        string connectionString = configuration.GetValue<string>(KEY_CONNECTION_STRING) ?? "";
+
         var services = new ServiceCollection()
             .AddLogging((builder) => builder.AddConsole())
             .AddDbContext<FinancialDbContext>(
@@ -64,9 +79,12 @@ public class TestCashMovimentController
             .AddScoped<ICashMovimentRepository, CashMovimentRepository>()
             .AddScoped<ICashMovimentService, CashMovimentService>();
         
-        service = services
-            .BuildServiceProvider()
+        var serviceProvider = services
+            .BuildServiceProvider();
+
+        service = serviceProvider
             .GetRequiredService<ICashMovimentService>();
+            
     }
 
     [Fact]
@@ -82,7 +100,7 @@ public class TestCashMovimentController
         //Assert
         var result = (actionResult as ObjectResult);
         Assert.NotNull(result);
-        Assert.Equal(result.StatusCode, 200);
+        Assert.Equal(result?.StatusCode ?? 0, (int)HttpStatusCode.OK);
     }
 
     [Fact]
@@ -98,7 +116,7 @@ public class TestCashMovimentController
         //Assert
         var result = (actionResult as ObjectResult);
         Assert.NotNull(result);
-        Assert.Equal(result.StatusCode, 404);
+        Assert.Equal(result?.StatusCode ?? 0, (int)HttpStatusCode.NotFound);
     }
     
     [Fact]
@@ -114,7 +132,7 @@ public class TestCashMovimentController
         //Assert
         var result = (actionResult as ObjectResult);
         Assert.NotNull(result);
-        Assert.Equal(result.StatusCode, 400);
+        Assert.Equal(result?.StatusCode ?? 0, (int)HttpStatusCode.BadGateway);
     }
 
     [Fact]
@@ -129,11 +147,11 @@ public class TestCashMovimentController
 
         //Assert
         var result = (actionResult as ObjectResult);
-        Assert.Equal(result.StatusCode, 200);
+        Assert.Equal(result?.StatusCode ?? 0, (int)HttpStatusCode.OK);
 
-        var dtoResponse = result.Value.Should().BeAssignableTo<ResultViewModel<CashMovimentViewModel>>().Subject;
+        var dtoResponse = result?.Value.Should().BeAssignableTo<ResultViewModel<CashMovimentViewModel>>().Subject;
 
-        Assert.Equal("Recebimento fornecedor cod.: 8993", dtoResponse.Result.Historic);
+        Assert.Equal("Recebimento fornecedor cod.: 8993", dtoResponse?.Result.Historic);
     }
     
     [Fact]
@@ -151,7 +169,7 @@ public class TestCashMovimentController
         //Assert
         var result = (actionResult as ObjectResult);
         Assert.NotNull(result);
-        Assert.Equal(result.StatusCode, 200);
+        Assert.Equal(result?.StatusCode ?? 0, (int)HttpStatusCode.OK);
     }
 
     [Fact]
@@ -168,11 +186,11 @@ public class TestCashMovimentController
 
         //Assert
         var result = (actionResult as ObjectResult);
-        Assert.Equal(result.StatusCode, 200);
+        Assert.Equal(result?.StatusCode ?? 0, (int)HttpStatusCode.OK);
 
-        var dtoResponse = result.Value.Should().BeAssignableTo<ResultViewModel<DailyBalanceViewModel>>().Subject;
+        var dtoResponse = result?.Value.Should().BeAssignableTo<ResultViewModel<DailyBalanceViewModel>>().Subject;
 
-        Assert.Equal("21/08/2023", dtoResponse.Result.StartDate);
+        Assert.Equal("21/08/2023", dtoResponse?.Result.StartDate);
     }
     
     [Fact]
@@ -189,10 +207,10 @@ public class TestCashMovimentController
 
         //Assert
         var result = (actionResult as ObjectResult);
-        Assert.Equal(result.StatusCode, 200);
+        Assert.Equal(result?.StatusCode ?? 0, (int)HttpStatusCode.OK);
 
-        var dtoResponse = result.Value.Should().BeAssignableTo<ResultViewModel<DailyBalanceViewModel>>().Subject;
+        var dtoResponse = result?.Value.Should().BeAssignableTo<ResultViewModel<DailyBalanceViewModel>>().Subject;
 
-        Assert.Equal(DateTime.Now.ToString(CONST_DATE_FORMAT), dtoResponse.Result.StartDate);
+        Assert.Equal(DateTime.Now.ToString(CONST_DATE_FORMAT), dtoResponse?.Result.StartDate);
     }
 }
