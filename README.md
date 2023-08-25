@@ -91,8 +91,7 @@ O respectivo acesso possibilitará o registro da nova imagem da aplicação no E
 <br>
 Quanto a aplicação implementada:<br>
 <br>
-Observação: ao invés de utilizarmos os termos de débito e crédito como sugerido no desafio, utilizamos os termos entrada e saída, respectivamente.
-Isso porque, os termos débito e crédito são referentes às partidas dobradas no registro dos fatos contábeis não refletem a realidade do regime de escrituração do Caixa. Na rotina do Caixa, que são operações simples, registram-se apenas o fato como entrada ou saída. Ademais, em um plano de contas a conta Caixa teria natureza devedora (Débito) nas entradas e, credora (Crédito), nas saídas. Situação que traz alguma confusão para as pessoas quando analisam isso no relatório.<br>
+Observação: ao invés de utilizarmos os termos de débito e crédito como sugerido no desafio, utilizamos os termos entrada e saída, respectivamente.<br>
 <br>
 A aplicação foi implementada utilizando os princípios do DDD (Domain-Driven Design), utilizando-se como padrão estrutural de projeto o Repositório (Repository) com unidade de trabalho atômica (Unit Of Work). A aplicação sugerida possui três camadas, as quais vamos enumerar de forma decrescente para entendimento.<br>
 <br>
